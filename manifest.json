@@ -12,7 +12,7 @@
   "orientation": "portrait",
   
   "background_color": "#000000",
-  "theme_color": "#e31b1b",
+  "theme_color": "#6aOdad",
   
   "icons": [
     
@@ -37,4 +37,5 @@
 
   ]
 }
+
 
