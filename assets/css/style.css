@@ -358,6 +358,22 @@ body {
     }
 
 }
+
+.footer-marca {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: #111;
+    color: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 15px;
+    font-size: 13px;
+    z-index: 9999;
+}
+
 .footer-marca a {
     color: #25D366;
     text-decoration: none;
