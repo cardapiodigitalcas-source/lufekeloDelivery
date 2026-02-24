@@ -356,4 +356,14 @@ body {
         --menu-btn-padding-x: 12px;
         --menu-btn-font-size: 0.65rem;
     }
+
+}
+.footer-marca a {
+    color: #25D366;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+body {
+    padding-bottom: 60px;
 }
