@@ -1,4 +1,4 @@
-const CACHE_NAME = "frango-araujo-v2";
+const CACHE_NAME = "lufekelo-delivery-v2";
 
 const STATIC_ASSETS = [
 
@@ -96,3 +96,4 @@ self.addEventListener("fetch", event => {
     );
 
 });
+
