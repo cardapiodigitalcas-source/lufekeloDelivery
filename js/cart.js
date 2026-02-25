@@ -1,5 +1,5 @@
 /* =========================================
-   CARRINHO ARAÚJO - VERSÃO ORIGINAL PRESERVADA
+   CARRINHO ARAÚJO - VERSÃO FINAL ATUALIZADA
    ========================================= */
 
 const Cart = {
@@ -155,7 +155,6 @@ const Cart = {
         if (subtotal < 15.00) return alert("😊 O pedido mínimo é R$ 15,00.");
 
         const config = window.storeConfig || {};
-        const mapsUrl = "https://maps.app.goo.gl/8mssG6G7X4Kph7u68"; // Sua localização aqui
         
         let foneLoja = config.whatsapp ? String(config.whatsapp).replace(/\D/g, '') : "5591992875156";
         if (foneLoja.length === 11) foneLoja = "55" + foneLoja;
@@ -169,34 +168,42 @@ const Cart = {
 
         if (!nome || !endereco) return alert("Por favor, preencha nome e endereço.");
 
-        let itensTexto = this.items.map(i => `✅ *${i.quantidade}x* ${i.nome}`).join('\n');
+        // CONFIGURAÇÃO DO LINK DO MAPA (MARCAÇÃO EXATA)
+        const enderecoBusca = `${endereco}, ${bairro}, Castanhal, PA`;
+        const linkGoogleMaps = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(enderecoBusca)}`;
+
+        // Listagem de itens com valores individuais
+        let itensTexto = this.items.map(i => {
+            const totalItem = (i.preco * i.quantidade).toFixed(2).replace('.', ',');
+            return `• ${i.quantidade}x ${i.nome} .... R$ ${totalItem}`;
+        }).join('\n');
+
         const taxaTexto = this.taxaEntrega.toFixed(2).replace('.', ',');
         const totalGeral = (subtotal + this.taxaEntrega).toFixed(2).replace('.', ',');
 
-        let msg = `✨ *${this.getSaudacao()}, equipe ${config.nome_loja || ' Lufekelo Delivery 10'}!* ❤️\n\n` +
-                  `👤 *CLIENTE:* ${nome}\n` +
-                  `📍 *ENDEREÇO:* ${endereco}\n` +
-                  `🏙️ *BAIRRO:* ${bairro}\n\n` +
-                  `*MEU PEDIDO:* \n${itensTexto}\n\n` +
-                  `🛵 *TAXA:* R$ ${taxaTexto}\n` +
-                  `💰 *TOTAL: R$ ${totalGeral}*\n` +
-                  `💳 *PAGAMENTO:* ${pagamento}\n`;
+        // Estrutura da Mensagem Limpa
+        let msg = `🛒 *NOVO PEDIDO - ${config.nome_loja || 'Lufekelo Delivery 10'}*
+-----------------------------------------
+👤 *CLIENTE:* ${nome}
+📍 *ENDEREÇO:* ${endereco} - ${bairro}
 
-        if (pagamento === 'Dinheiro' && troco) msg += `💵 *TROCO PARA:* R$ ${troco}\n`;
-        if (obs) msg += `\n💬 *OBS:* ${obs}\n`;
+*ITENS DO PEDIDO:*
+${itensTexto}
 
-        // ADIÇÃO DO CARD DO ENTREGADOR
-        msg += `\n-----------------------------------------\n` +
-               `🛵 *CARD DO ENTREGADOR (COPIAR):*\n\n` +
-               `*SAINDO DO Lufekelo Delivery 10!* ✨\n` +
-               `📍 *LOCAL DA LOJA:* ${mapsUrl}\n` + 
-               `🏠 **CLIENTE:** ${nome}\n` +
-               `🏠 **ENDEREÇO:** ${endereco}\n` +
-               `🏙️ **BAIRRO:** ${bairro}\n` +
-               `💵 **TAXA MOTO:** R$ ${taxaTexto}\n` +
-               `💰 **VALOR TOTAL:** R$ ${totalGeral}\n` +
-               `💳 **PAGTO:** ${pagamento}\n` +
-               `-----------------------------------------`;
+-----------------------------------------
+🛵 *ENTREGA:* R$ ${taxaTexto}
+💰 *TOTAL A PAGAR: R$ ${totalGeral}*
+💳 *FORMA:* ${pagamento}${pagamento === 'Dinheiro' && troco ? ' (Troco p/ ' + troco + ')' : ''}
+${obs ? '\n💬 *OBS:* ' + obs : ''}
+
+-----------------------------------------
+🚚 *DADOS PARA O MOTOBOY (COPIAR):*
+
+*CLIENTE:* ${nome}
+*DESTINO:* ${endereco} - ${bairro}
+*MAPS:* ${linkGoogleMaps}
+*VALOR TOTAL:* R$ ${totalGeral} (${pagamento})
+*TAXA MOTO:* R$ ${taxaTexto}`;
 
         window.open(`https://api.whatsapp.com/send?phone=${foneLoja}&text=${encodeURIComponent(msg)}`, "_blank");
         
@@ -205,7 +212,7 @@ const Cart = {
         if (pagamento === 'Pix') {
             this.abrirModalCopiaPix();
         } else {
-            alert("✨ Pedido enviado com sucesso! Verifique seu WhatsApp.");
+            alert("✨ Pedido enviado com sucesso!");
             setTimeout(() => { location.reload(); }, 1500);
         }
     },
